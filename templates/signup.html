@@ -1,0 +1,12 @@
+<form method="POST" class="container mt-5">
+  <h2>Signup</h2>
+  <input type="text" name="username" placeholder="Choose Username" required class="form-control mb-2">
+  <input type="email" name="email" placeholder="Email Address" required class="form-control mb-2">
+  <input type="password" name="password" placeholder="Choose Password" required class="form-control mb-2">
+  <button type="submit" class="btn btn-success">Sign up</button>
+  <p class="mt-2">Already have an account? <a href="/login">Login</a></p>
+</form>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<footer class="mt-5">
+  &copy; 2025 Smart Farming Project | Built with ❤️ by Rohan
+</footer>
