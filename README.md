@@ -30,6 +30,8 @@ It enables farmers and users to monitor real-time sensor data, AI predictions, m
 | 🌐 Deployment| GitHub (project versioning), Render (optional for online hosting) |
 
 ---
+## 🌐 Live App
+[Smart Farming App on Render](https://smart-farming-app-tcrz.onrender.com)
 
 ## 📁 Folder Structure
 
