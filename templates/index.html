@@ -1,116 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Add this inside <head> -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
-
-<style>
-  body {
-    font-family: 'Inter', sans-serif;
-  }
-</style>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Smart Farming Dashboard</title>
 
-  <!-- Bootstrap + Google Fonts -->
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    html {
+    scroll-behavior: smooth;
+  }
+
+  .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.navbar-nav .dropdown-menu {
+  border-radius: 12px;
+  font-size: 0.95rem;
+}
+
+  .card, .btn {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px rgba(0, 100, 0, 0.3);
+  }
+  </style>
 </head>
 <body>
- 
-  <div class="container my-4">
-  <button onclick="getLocation()" class="btn btn-primary">
-    📍 Detect My Location
-  </button>
-  <p id="location-result" class="mt-2 text-success"></p>
-</div>
 
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-success px-3">
-  <a class="navbar-brand fw-bold" href="/">🌾 Smart Farming</a>
-
-  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg shadow-lg sticky-top px-4" style="background: linear-gradient(to right, #28a745, #218838); font-family: 'Inter', sans-serif;">
+  <a class="navbar-brand fw-bold text-white" href="/" style="font-size: 1.6rem;">
+    🌾 Smart Farming
+  </a>
+  <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="mainNavbar">
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-2">
       <li class="nav-item">
-        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link text-white px-3 py-2 rounded-pill" href="/">🏠 Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/devices">My Device</a>
+        <a class="nav-link text-white px-3 py-2 rounded-pill" href="/devices">📟 My Device</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/connect">Connect</a>
+        <a class="nav-link text-white px-3 py-2 rounded-pill" href="/connect">📞 Connect</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/feedback">Feedback</a>
+        <a class="nav-link text-white px-3 py-2 rounded-pill" href="/analytics">📊 Analytics</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white px-3 py-2 rounded-pill" href="/feedback">📝 Feedback</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white px-3 py-2 rounded-pill" href="/about">ℹ️ About</a>
       </li>
     </ul>
+
+    <!-- Profile Dropdown -->
     <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link btn btn-light text-dark px-3 py-1 rounded" href="/logout">🔓 Logout</a>
-      </li>
+      <li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 btn btn-light text-dark px-3 py-1 rounded" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <img src="{{ url_for('static', filename='uploads/' + (profile_pic if profile_pic else 'default.png')) }}" width="32" height="32" class="rounded-circle border border-success">
+
+    {{ user_name or "User" }}
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+    <li><span class="dropdown-item fw-bold">Name: {{ user_name }}</span></li>
+    <li><span class="dropdown-item">Email: {{ user_email }}</span></li>
+    <li><span class="dropdown-item">Role: Farmer</span></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="/edit-profile">✏️ Edit Profile</a></li>
+    <li><a class="dropdown-item" href="/change-password">🔐 Change Password</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item text-danger" href="/logout">🔓 Logout</a></li>
+  </ul>
+</li>
     </ul>
   </div>
 </nav>
 
-
-<div class="hero-dashboard d-flex align-items-center justify-content-center text-white text-center">
-    <div>
-        <h1>Welcome, {{ user_name }}</h1>
-        <p>Your smart farming hub at a glance.</p>
-    </div>
-</div>
-
-
-  <div class="hero text-white d-flex flex-column justify-content-center align-items-center text-center"
-     style="height: 100vh; background: url('/static/images/hero.jpg') center/cover no-repeat;">
-  <div class="bg-dark bg-opacity-50 p-5 rounded">
+<!-- Hero Section -->
+<div class="hero text-white d-flex flex-column justify-content-center align-items-center text-center"
+     style="height: 100vh; background: linear-gradient(to right, rgba(0,100,0,0.6), rgba(0,100,0,0.6)), url('{{ url_for('static', filename='images/hero.jpg') }}') center/cover no-repeat;">
+  <div class=" bg-opacity-50 p-5 rounded animate__animated animate__fadeIn">
     <h1 class="display-4 fw-bold">Smart Farming Made Simple</h1>
     <p class="lead">Monitor. Predict. Cultivate smarter.</p>
     <a href="/devices" class="btn btn-light mt-3 px-4">Get Started</a>
   </div>
 </div>
 
+<!-- Quick Navigation -->
+<div class="container-fluid bg-light text-center py-3 " data-aos="fade-up">
+  <a href="/devices" class="text-success fw-bold mx-3">📟 Devices</a>
+  <a href="/sensors" class="text-success fw-bold mx-3">🌱 Sensors</a>
+  <a href="/ai" class="text-success fw-bold mx-3">🤖 AI Insights</a>
+  <a href="/market" class="text-success fw-bold mx-3">📈 Market</a>
+  <a href="/feedback" class="text-success fw-bold mx-3">📝 Feedback</a>
+</div>
 
-    <!-- Sensor Cards -->
-    <div class="row g-4 mb-4">
-      <div class="col-md-4">
-        <div class="sensor-card card border-0 shadow-sm p-4 text-center">
-          <h5 class="fw-bold">🌡️ Temperature</h5>
-          <p id="temp" class="fs-3 text-danger">-- °C</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="sensor-card card border-0 shadow-sm p-4 text-center">
-          <h5 class="fw-bold">💧 Humidity</h5>
-          <p id="humidity" class="fs-3 text-primary">-- %</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="sensor-card card border-0 shadow-sm p-4 text-center">
-          <h5 class="fw-bold">🌱 Soil Moisture</h5>
-          <p id="moisture" class="fs-3 text-success">--</p>
-        </div>
-      </div>
-    </div>
+<!-- Welcome & Location -->
+<div class="container my-4 text-center data-aos="fade-up"">
+  <button onclick="getLocation()" class="btn btn-outline-primary mt-2">📍 Detect My Location</button>
+  <p id="location-result" class="mt-2 text-success"></p>
+</div>
 
-    <!-- Chart -->
-    <div class="card shadow-sm p-4">
-      <h5 class="mb-3">📈 Sensor Trends</h5>
-      <canvas id="sensorChart" height="100"></canvas>
+<!-- Weather Widget -->
+<div class="container my-3 text-center data-aos="fade-up"">
+  <h5 class="fw-bold mb-2">🌤️ Live Weather</h5>
+  <p id="weather-result" class="text-primary">Fetching weather...</p>
+</div>
+
+<div class="text-center my-4" data-aos="fade-down">
+  <h2 class="text-success fw-bold">👋 Welcome back, {{ user_name.split()[0] }}</h2>
+  <p class="text-muted">Here’s your smart farming dashboard overview</p>
+</div>
+
+
+<!-- Sensor Cards -->
+<div class="row text-center mb-5" data-aos="fade-up">
+  <div class="col-md-4 mb-3">
+    <div class="card bg-light shadow-sm p-3">
+      <h5>🌡 Avg Temperature</h5>
+      <h4 class="text-danger">29°C</h4>
     </div>
   </div>
+  <div class="col-md-4 mb-3">
+    <div class="card bg-light shadow-sm p-3">
+      <h5>💧 Avg Humidity</h5>
+      <h4 class="text-primary">65%</h4>
+    </div>
+  </div>
+  <div class="col-md-4 mb-3">
+    <div class="card bg-light shadow-sm p-3">
+      <h5>🌱 Avg Moisture</h5>
+      <h4 class="text-success">520</h4>
+    </div>
+  </div>
+</div>
 
-  <div class="container mt-5">
+
+  <!-- Chart -->
+  <div class="card shadow-sm p-4">
+    <h5 class="mb-3">📈 Sensor Trends</h5>
+    <canvas id="sensorChart" height="100"></canvas>
+  </div>
+</div>
+
+<!-- Feature Cards -->
+<div class="container mt-5" data-aos="fade-up">
   <h3 class="text-center mb-4 fw-bold">🌾 Key Features</h3>
   <div class="row justify-content-center">
     <div class="col-md-4 mb-4">
@@ -146,22 +209,54 @@
   </div>
 </div>
 
-    <div class="container-fluid justify-content-center">
-    <a href="/logout" class="btn btn-outline-danger btn-sm">Logout</a>
-    
+<!-- Footer -->
+<footer class="mt-5 bg-success text-white text-center py-3">
+  &copy; 2025 Smart Farming Project | Built with ❤️ by Rohan
+</footer>
 
-  </div>
-  </div>
-  
-
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(sendLocation, showError);
     } else {
-      alert("Geolocation is not supported by your browser.");
+      alert("Geolocation not supported.");
     }
   }
+  const ctx = document.getElementById('sensorChart').getContext('2d');
+  const sensorChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['8 AM', '10 AM', '12 PM', '2 PM', '4 PM'],
+      datasets: [{
+        label: 'Soil Moisture',
+        data: [40, 45, 43, 50, 48],
+        borderColor: 'green',
+        fill: false
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' }
+      }
+    }
+  });
+
+  fetch("/data")
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("temp").textContent = data.temperature + " °C";
+    document.getElementById("humidity").textContent = data.humidity + " %";
+    document.getElementById("moisture").textContent = data.soil_moisture;
+
+    if (data.alerts && data.alerts.length > 0) {
+      alert("Alerts:\n" + data.alerts.join("\n"));
+    }
+  });
+
 
   function sendLocation(position) {
     const lat = position.coords.latitude;
@@ -172,25 +267,33 @@
 
     fetch("/save-location", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ latitude: lat, longitude: lon }),
-    })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("Saved:", data);
-    });
+    }).then(res => res.json())
+      .then(data => console.log("Location saved:", data));
+
+    getWeather(lat, lon);
+  }
+
+  function getWeather(lat, lon) {
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`)
+      .then(res => res.json())
+      .then(data => {
+        const weather = data.current_weather;
+        document.getElementById("weather-result").textContent =
+          `🌡️ Temp: ${weather.temperature}°C | 💨 Wind: ${weather.windspeed} km/h`;
+      });
   }
 
   function showError(error) {
-    alert("Location Error: " + error.message);
+    alert("Error: " + error.message);
   }
+</script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init();
 </script>
 
 
 </body>
 </html>
-<footer class="mt-5">
-  &copy; 2025 Smart Farming Project | Built with ❤️ by Rohan
-</footer>

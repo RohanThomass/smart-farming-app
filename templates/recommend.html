@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2 class="fw-bold mb-3">🌾 Crop Recommendation</h2>
+  <p>Based on current sensor values:</p>
+  <ul class="list-group w-50 mx-auto">
+    <li class="list-group-item">Temperature: {{ temp }} °C</li>
+    <li class="list-group-item">Humidity: {{ hum }}%</li>
+    <li class="list-group-item">Soil Moisture: {{ mois }}</li>
+  </ul>
+  <h4 class="mt-4">✅ Best Suggested Crop: <span class="text-success">{{ crop }}</span></h4>
+</div>
+{% endblock %}

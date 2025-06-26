@@ -1,72 +1,114 @@
+/* General Styling */
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #f4f8f9;
-  margin: 0;
-  padding: 0;
+  background-color: #f5f9f6;
   color: #333;
+  line-height: 1.6;
 }
 
-.sensor-card {
-  transition: all 0.3s ease;
-  border-radius: 20px;
-  background: #ffffff;
-}
-
-.sensor-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.card h5 {
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.card p {
-  margin: 0;
-}
-
-.hero-dashboard {
-    background: url('/static/img/hero.jpg') no-repeat center center;
-    background-size: cover;
-    height: 70vh;
-    padding: 2rem;
-    border-radius: 20px;
-    box-shadow: inset 0 0 1000px rgba(0,0,0,0.3);
-    margin:10px;
-}
-
-.navbar-brand {
-  font-size: 1.3rem;
+h1, h2, h3, h4, h5 {
   font-weight: 700;
 }
 
-.nav-link {
-  font-weight: 500;
+a {
+  text-decoration: none;
 }
 
-.navbar .btn-light:hover {
-  background-color: #f8f9fa;
-  color: #000;
+.btn {
+  border-radius: 50px;
+  transition: all 0.2s ease-in-out;
 }
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+/* Hero Section */
+.hero {
+  height: 100vh;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+}
+.hero h1, .hero p {
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+}
+
+.hero-dashboard h1 {
+  font-weight: 700;
+  font-size: 3rem;
+}
+
+/* Cards */
 .card {
+  border-radius: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 12px 24px rgba(0, 128, 0, 0.15);
+}
+
+/* Sensor Card Styling */
+.sensor-card {
   border-radius: 1rem;
   transition: all 0.3s ease-in-out;
 }
-textarea {
-  resize: vertical;
+.sensor-card:hover {
+  transform: scale(1.03);
+  background: #e9f5e9;
 }
-.card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+
+/* Footer */
+footer {
+  background-color: #198754;
+  color: white;
+  padding: 1rem;
+  text-align: center;
 }
-.btn {
+
+/* Profile Card */
+.profile-card {
+  background-color: #fff;
+  border-left: 6px solid #198754;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.05);
   border-radius: 1rem;
 }
 
-footer {
-  background: #2e7d32;
-  color: white;
-  padding: 15px 0;
-  text-align: center;
+/* Feature Images */
+.card-img-top {
+  height: 180px;
+  object-fit: cover;
+}
+
+/* Navbar */
+.navbar {
+  font-weight: 600;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+}
+
+.navbar .btn {
+  font-weight: 600;
+}
+
+/* Quick Navigation Links */
+.container-fluid.bg-light a {
+  font-size: 1.05rem;
+  transition: color 0.2s ease-in-out;
+}
+
+.container-fluid.bg-light a:hover {
+  color: #0f5132;
+  text-decoration: underline;
+}
+.dropdown-menu {
+  font-size: 0.95rem;
+  border-radius: 10px;
+}
+.dropdown-item {
+  padding: 8px 16px;
 }

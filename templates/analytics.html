@@ -1,0 +1,73 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="fw-bold text-center mb-4">📊 Farm Analytics Dashboard</h2>
+
+  {% if no_data %}
+    <div class="alert alert-warning text-center">No sensor data available to analyze.</div>
+  {% else %}
+    <div class="row text-center mb-4">
+      <div class="col-md-4">
+        <h5>🌡️ Temperature (°C)</h5>
+        <p>Avg: {{ analytics.avg_temp }}, Max: {{ analytics.max_temp }}, Min: {{ analytics.min_temp }}</p>
+      </div>
+      <div class="col-md-4">
+        <h5>💧 Humidity (%)</h5>
+        <p>Avg: {{ analytics.avg_hum }}, Max: {{ analytics.max_hum }}, Min: {{ analytics.min_hum }}</p>
+      </div>
+      <div class="col-md-4">
+        <h5>🌱 Soil Moisture</h5>
+        <p>Avg: {{ analytics.avg_moist }}, Max: {{ analytics.max_moist }}, Min: {{ analytics.min_moist }}</p>
+      </div>
+    </div>
+
+    <div class="card shadow-sm p-4 mb-4">
+      <h5>📈 Sensor Trend Visualization</h5>
+      <canvas id="analyticsChart" height="120"></canvas>
+    </div>
+  {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const data = {{ chart_data|tojson }};
+  const labels = Array.from({length: data.length}, (_, i) => i + 1);
+
+  const chart = new Chart(document.getElementById('analyticsChart'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Temperature (°C)',
+          data: data.map(row => row[0]),
+          borderColor: 'red',
+          fill: false
+        },
+        {
+          label: 'Humidity (%)',
+          data: data.map(row => row[1]),
+          borderColor: 'blue',
+          fill: false
+        },
+        {
+          label: 'Soil Moisture',
+          data: data.map(row => row[2]),
+          borderColor: 'green',
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: false
+        }
+      }
+    }
+  });
+</script>
+
+{% endblock %}
