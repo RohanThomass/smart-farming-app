@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, jsonify, send_file
 from database.db import init_db, insert_user, validate_user, insert_sensor_data, update_user_profile, change_user_password
-from flask_mail import Mail, Message
+
 from flask import request, redirect
 from dotenv import load_dotenv
 load_dotenv()
