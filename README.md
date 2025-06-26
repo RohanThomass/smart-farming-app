@@ -7,27 +7,29 @@ It enables farmers and users to monitor real-time sensor data, AI predictions, m
 
 ## 🚀 Features
 
-- ✅ **User Authentication** – Login, signup, and forgot password (with persistent session using SQLite)
-- 📟 **Sensor Dashboard** – Real-time environmental monitoring (temperature, humidity, etc.)
-- 🧠 **AI Insights** – Predict crop health and yields (feature placeholder)
-- 📈 **Market Monitoring** – Track crop prices and trends
-- 📬 **Feedback System** – Query submission with FAQ display
-- 🌐 **Device Management** – View connected devices and add new ones
-- 🌍 **Location Detection** – Real-time location access using browser geolocation
-- 🧭 **Responsive Design** – Fully mobile/tablet/desktop compatible
-- 🎨 **Modern UI** – Hero sections, feature cards, background gradients, animations
-
+- ✅ **User Authentication** – Signup, Login, Logout & Forgot Password
+- 📟 **Sensor Dashboard** – Real-time Temperature, Humidity & Soil Moisture Monitoring
+- 🧠 **AI Insights** – Understand how sensors support crop health (expandable for ML)
+- 📈 **Market Monitoring** – Live Crop Prices via [eNAM Dashboard](https://enam.gov.in/web/dashboard/live_price)
+- 🧭 **Quick Navigation Cards** – Interactive cards for Explore, Monitor, and Check Now
+- 📬 **Feedback System** – User queries with FAQs
+- 🌍 **Geolocation Tracking** – Save user’s farm location
+- 🖼 **Profile Picture Upload** – Users can set/update profile image
+- 🌐 **Device Management** – View connected devices, display statuses
+- 🎨 **Responsive UI** – Hero sections, animations, cards, and mobile-first layout
+- 📥 **Data Export** – Download sensor history as CSV
+- 🔒 **Session Management** – Secure access using Flask sessions
 ---
 
 ## 🛠️ Tech Stack
 
-| Layer        | Technologies |
-|--------------|--------------|
-| 💻 Frontend  | **HTML**, **CSS**, **Bootstrap 5**, **JavaScript**, **Chart.js**, **Animate.css** |
-| ⚙️ Backend   | **Python (Flask)** |
-| 🗄️ Database  | **SQLite** |
-| 🧠 AI (future)| Placeholder for model integration |
-| 🌐 Deployment| GitHub (project versioning), Render (optional for online hosting) |
+| Layer        | Technologies                                     |
+|-------------|--------------------------------------------------|
+| 💻 Frontend  | HTML, CSS, Bootstrap 5, JavaScript, Chart.js, Animate.css |
+| ⚙️ Backend   | Python (Flask Framework)                         |
+| 🗄️ Database  | SQLite (for users, sensors, locations, feedback) |
+| 🧠 AI (WIP)  | Placeholder (future ML model integration)        |
+| 🚀 Hosting   | [Render](https://render.com), GitHub             |
 
 ---
 ## 🌐 Live App
