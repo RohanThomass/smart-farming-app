@@ -1,30 +1,33 @@
 from flask import Flask, render_template, request, redirect, session, jsonify, send_file
 from database.db import init_db, insert_user, validate_user, insert_sensor_data, update_user_profile, change_user_password
-
-from flask import request, redirect
+from genai_service import generate_farming_insight
+from flask_mail import Mail
 from dotenv import load_dotenv
-load_dotenv()
-
-import random
-import sqlite3
-import csv
-import os
-import json
+import random, sqlite3, csv, os, json
 from werkzeug.security import generate_password_hash
 
+# Load environment variables early
+load_dotenv()
+
 app = Flask(__name__)
-# Mail Configuration
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
-app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 
+# ✅ Secret Key (make sure .env has SECRET_KEY=mystrongsecret)
+app.secret_key = os.getenv("SECRET_KEY", "supersecret123")
 
-app.secret_key = os.getenv('SECRET_KEY')
+# ✅ Mail Configuration
+app.config.update(
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=587,
+    MAIL_USE_TLS=True,
+    MAIL_USERNAME=os.getenv('MAIL_USERNAME'),
+    MAIL_PASSWORD=os.getenv('MAIL_PASSWORD')
+)
 
-# Initialize database on app start
+mail = Mail(app)
+
+# Initialize database
 init_db()
+
 
 @app.route('/')
 def home():
@@ -48,7 +51,28 @@ def home():
         return redirect('/login')
 
     
+@app.route('/ask-ai', methods=['POST'])
+def ask_ai():
+    if 'user' not in session:
+        return jsonify({'error': 'unauthorized'}), 403
 
+    data = request.get_json()
+    question = data.get('question')
+
+    # fetch latest sensor readings
+    conn = sqlite3.connect('sensor.db')
+    c = conn.cursor()
+    c.execute("SELECT temperature, humidity, soil_moisture FROM sensor_data ORDER BY timestamp DESC LIMIT 1")
+    latest = c.fetchone()
+    conn.close()
+
+    if not latest:
+        return jsonify({'error': 'No sensor data found'}), 404
+
+    sensor_data = {'temperature': latest[0], 'humidity': latest[1], 'soil_moisture': latest[2]}
+    answer = generate_farming_insight(sensor_data, question)
+
+    return jsonify({'answer': answer})
 
 @app.before_request
 def before_request():
@@ -67,7 +91,7 @@ def about():
         "location": "Nellore, Andhra Pradesh, India"
     }
     founder_info = {
-        "name": "Rohan Kumar",
+        "name": "Rohan Battepati",
         "bio": "Rohan is a passionate tech innovator and agricultural enthusiast with a vision to digitize Indian farming. With a background in computer applications and a deep understanding of rural challenges, he leads AgriSmart to deliver impactful solutions."
     }
     return render_template('about.html', company=company_info, founder=founder_info)

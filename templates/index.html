@@ -50,6 +50,20 @@
   </style>
 </head>
 <body>
+<!-- AI Smart Advisor -->
+<div class="container my-5" data-aos="fade-up">
+  <div class="card shadow p-4 bg-light">
+    <h3 class="text-success fw-bold mb-3">🤖 Smart Farm Advisor</h3>
+    <p class="text-muted">Ask your farm’s AI anything — irrigation, pest control, or soil guidance.</p>
+
+    <div class="input-group mb-3">
+      <input id="userQuestion" type="text" class="form-control" placeholder="Ask your AI assistant..." />
+      <button class="btn btn-success" onclick="askAI()">Ask</button>
+    </div>
+
+    <div id="aiResponse" class="alert alert-success d-none"></div>
+  </div>
+</div>
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg shadow-lg sticky-top px-4" style="background: linear-gradient(to right, #28a745, #218838); font-family: 'Inter', sans-serif;">
@@ -291,8 +305,42 @@
 </script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-  AOS.init();
+AOS.init();
+
+async function askAI() {
+  const question = document.getElementById("userQuestion").value.trim();
+  const responseBox = document.getElementById("aiResponse");
+
+  if (!question) {
+    responseBox.classList.remove("d-none");
+    responseBox.classList.add("alert-danger");
+    responseBox.textContent = "Please enter a question!";
+    return;
+  }
+
+  responseBox.classList.remove("d-none", "alert-danger", "alert-success");
+  responseBox.classList.add("alert-info");
+  responseBox.textContent = "Analyzing your farm data...";
+
+  try {
+    const res = await fetch("/ask-ai", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question })
+    });
+
+    const data = await res.json();
+    responseBox.classList.remove("alert-info");
+    responseBox.classList.add(data.error ? "alert-danger" : "alert-success");
+    responseBox.textContent = data.answer || data.error || "No response received.";
+  } catch (error) {
+    responseBox.classList.remove("alert-info");
+    responseBox.classList.add("alert-danger");
+    responseBox.textContent = "Error contacting AI service.";
+  }
+}
 </script>
+
 
 
 </body>
